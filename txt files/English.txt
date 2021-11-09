@@ -61,4 +61,4 @@ Background color base window
 Background color settings window
 Save project
 Del project
-Restart the program to see the changes
+Restart the program to see the changes.

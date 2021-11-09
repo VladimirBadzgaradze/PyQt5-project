@@ -252,7 +252,6 @@ class Main(QMainWindow):
         self.window_base = Base(self)
 
         self.file_name = ''
-        self.pixels = []
         self.x_img, self.y_img = 0, 0
 
         self.mouse_pressed = False
@@ -263,10 +262,12 @@ class Main(QMainWindow):
 
         self.language = None
         self.language_words = []
+
         cur = self.con.cursor()
         res = cur.execute("SELECT val FROM settings WHERE name='language'").fetchall()
         res = res[0][0]
         self.language = res
+
         with open(f'txt files/{res}.txt', mode='r', encoding='utf-8') as f_in:
             self.language_words = f_in.readlines()
         self.language_words = list(map(lambda z: z.split('\n')[0], self.language_words))
@@ -290,15 +291,11 @@ class Main(QMainWindow):
         uic.loadUi('UI/main.ui', self)
         self.init_ui()
 
-        cur = self.con.cursor()
         x = cur.execute("SELECT val FROM settings WHERE name='border radius'").fetchall()
         x = x[0][0]
         for i in self.color_group.buttons():
             i.setStyleSheet(f"background-color : #{i.objectName()[4:]}; border-radius: {round(30 * x / 100)}px;")
             i.clicked.connect(self.set_color)
-
-        self.selected_color.setStyleSheet(f"border-radius: {round(40 * x / 100)}px;")
-        self.btn_color_fill.setStyleSheet(f"border-radius: {round(40 * x / 100)}px;")
 
         for i in self.tool_group.buttons():
             i.clicked.connect(self.set_tool)
@@ -381,7 +378,6 @@ class Main(QMainWindow):
 
     def new(self):
         self.events = list()
-        self.pixels = list()
         self.x_img, self.y_img = 0, 0
         self.file_name = ''
         self.size_holst()
@@ -392,7 +388,6 @@ class Main(QMainWindow):
         if filename[0]:
             img = Image.open(filename[0]).resize((self.width, self.height)).convert('RGB')
             img.save('img.jpg')
-            self.pixels = img.load()
             self.x_img, self.y_img = img.size
             self.label.setPixmap(QPixmap('img.jpg'))
             self.setWindowTitle(f'{self.language_words[2]} {filename[0]}')
@@ -894,7 +889,6 @@ class Main(QMainWindow):
 
     def clear(self):
         self.events = list()
-        self.pixels = list()
         self.x_img, self.y_img = 0, 0
         self.file_name = ''
         im = Image.open('img.jpg').resize((self.width, self.height))
