@@ -76,7 +76,7 @@ class Setting(QWidget):
         self.color_base = col[2][0]
 
         ln = cur.execute("SELECT val FROM settings WHERE name='language'").fetchall()
-        res = None
+        res = ['English', 'Russian']
         if ln[0][0] == 'English':
             res = ['English', 'Russian']
         elif ln[0][0] == 'Russian':
@@ -85,7 +85,7 @@ class Setting(QWidget):
         self.lan = ln[0][0]
         bor_rad = cur.execute("SELECT val FROM settings WHERE name='border radius'").fetchall()
         bor_rad = str(bor_rad[0][0])
-        res = None
+        res = ['0%', '20%', '40%', '60%', '80%', '100%']
         if bor_rad == '0':
             res = ['0%', '20%', '40%', '60%', '80%', '100%']
         elif bor_rad == '10':
